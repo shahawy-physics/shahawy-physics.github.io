@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>كويز شابتر 6 · الشهاوي</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+img{max-width:100%}
+/* Layout: one centered column, a single card per screen; the logo's seven-colour ring reappears as the progress strip. */
+:root{
+  --bg:#F3F5FB; --surface:#FFFFFF; --surface-2:#EEF1F9; --line:#DCE1EF;
+  --ink:#141B3D; --muted:#5B6385; --navy:#1E2A78; --navy-ink:#FFFFFF;
+  --red:#E1262B; --ok:#1E9E50; --ok-bg:#E5F6EC; --bad:#D7262B; --bad-bg:#FDECEC;
+  --r1:#E1262B; --r2:#F28A1B; --r3:#F5B90F; --r4:#1E6FC7; --r5:#2BA84A; --r6:#B5489A; --r7:#262D7A;
+  --f-ar:"Cairo", "Segoe UI", Tahoma, sans-serif;
+  --f-en:"IBM Plex Sans", "Segoe UI", Arial, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --shadow:0 1px 2px rgba(20,27,61,.06), 0 8px 28px rgba(20,27,61,.07);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0E1226; --surface:#161B36; --surface-2:#1D2345; --line:#2A3160;
+  --ink:#ECEFFC; --muted:#A3AACB; --navy:#7E8CFF; --navy-ink:#0E1226;
+  --red:#FF5A5E; --ok:#4CD487; --ok-bg:#12301F; --bad:#FF6B6E; --bad-bg:#3A1619;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35); color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0E1226; --surface:#161B36; --surface-2:#1D2345; --line:#2A3160;
+  --ink:#ECEFFC; --muted:#A3AACB; --navy:#7E8CFF; --navy-ink:#0E1226;
+  --red:#FF5A5E; --ok:#4CD487; --ok-bg:#12301F; --bad:#FF6B6E; --bad-bg:#3A1619;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35); color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); font-family:var(--f-ar); line-height:1.6;
+  padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px)); padding-block:28px 40px}
+.wrap{max-width:720px; margin:0 auto; display:flex; flex-direction:column; gap:18px}
+.ring{height:6px; border-radius:6px; background:linear-gradient(90deg,var(--r1) 0 14.28%,var(--r2) 0 28.56%,var(--r3) 0 42.84%,var(--r4) 0 57.12%,var(--r5) 0 71.4%,var(--r6) 0 85.68%,var(--r7) 0)}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow); padding:24px; display:flex; flex-direction:column; gap:18px}
+button,input{font:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--r4); outline-offset:2px}
+
+/* ---------- start ---------- */
+.hero{display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; padding-top:6px}
+.logo{width:132px; height:132px; border-radius:50%; background:#fff; box-shadow:var(--shadow)}
+.eyebrow{font-family:var(--f-en); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); direction:ltr}
+h1{font-size:clamp(30px,6vw,40px); font-weight:900; line-height:1.15; margin:0; text-wrap:balance}
+h1 .acc{color:var(--red)}
+.sub{font-family:var(--f-en); font-size:17px; color:var(--navy); font-weight:600; direction:ltr; margin:0}
+.hint{color:var(--muted); font-size:15px; margin:0; max-width:52ch}
+.law{font-family:var(--f-mono); font-size:13px; color:var(--muted); direction:ltr; display:flex; gap:14px; flex-wrap:wrap; justify-content:center}
+.law b{color:var(--ink); font-weight:600}
+.field{display:flex; flex-direction:column; gap:8px}
+.field label{font-weight:700; font-size:15px}
+.field input{border:1.5px solid var(--line); background:var(--surface-2); color:var(--ink); border-radius:12px; padding:12px 14px; font-size:16px}
+.field input:focus{border-color:var(--navy); outline:none}
+.req{color:var(--red); font-weight:600; font-size:13px}
+.facts{display:grid; grid-template-columns:repeat(3,1fr); gap:8px}
+.fact{border:1.5px solid var(--line); background:var(--surface-2); border-radius:12px; padding:10px 6px; display:flex; flex-direction:column; align-items:center; line-height:1.3; text-align:center}
+.fact .n{font-family:var(--f-mono); font-size:22px; font-weight:600; color:var(--navy)}
+.fact .l{font-size:12.5px; color:var(--muted)}
+.chip{border:1.5px solid var(--line); background:var(--surface-2); color:var(--ink); border-radius:12px; padding:10px 6px; display:flex; flex-direction:column; align-items:center; gap:0; line-height:1.3}
+.chip .n{font-family:var(--f-mono); font-size:20px; font-weight:600}
+.chip .l{font-size:12px; color:var(--muted)}
+.chip[aria-pressed="true"]{border-color:var(--navy); background:var(--navy); color:var(--navy-ink)}
+.chip[aria-pressed="true"] .l{color:var(--navy-ink); opacity:.85}
+.btn{border:0; border-radius:12px; padding:13px 18px; font-weight:800; font-size:17px; background:var(--red); color:#fff; transition:transform .12s, opacity .12s}
+.btn:hover:not(:disabled){transform:translateY(-1px)}
+.btn:disabled{opacity:.4; cursor:not-allowed}
+.btn.ghost{background:transparent; color:var(--navy); border:1.5px solid var(--line)}
+.btn.navy{background:var(--navy); color:var(--navy-ink)}
+.err{color:var(--bad); font-size:14px; margin:0; min-height:1.4em}
+
+/* ---------- quiz ---------- */
+.top{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.who{display:flex; align-items:center; gap:10px; min-width:0}
+.who img{width:40px; height:40px; border-radius:50%; background:#fff}
+.who .nm{font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:42vw}
+.who .ch{font-size:12px; color:var(--muted); font-family:var(--f-en); direction:ltr}
+.stats{display:flex; gap:8px; font-family:var(--f-mono); font-size:14px}
+.pill{border-radius:999px; padding:4px 10px; background:var(--surface-2); border:1px solid var(--line); font-variant-numeric:tabular-nums; white-space:nowrap}
+.pill.ok{color:var(--ok)} .pill.bad{color:var(--bad)}
+.track{display:flex; gap:3px; direction:ltr}
+.track i{flex:1; height:7px; border-radius:4px; background:var(--line)}
+.track i.cur{background:var(--navy)}
+.track i.ok{background:var(--ok)} .track i.bad{background:var(--bad)}
+.qhead{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap}
+.qno{font-family:var(--f-mono); font-size:14px; color:var(--muted); direction:ltr}
+.tag{font-size:13px; font-weight:700; padding:3px 10px; border-radius:999px; background:var(--surface-2); color:var(--navy); border:1px solid var(--line)}
+.qtext{font-family:var(--f-en); direction:ltr; text-align:left; font-size:19px; line-height:1.55; font-weight:500; margin:0}
+.opts{display:flex; flex-direction:column; gap:10px; direction:ltr}
+.opt{display:flex; align-items:center; gap:12px; text-align:left; border:1.5px solid var(--line); background:var(--surface); color:var(--ink); border-radius:12px; padding:12px 14px; font-family:var(--f-en); font-size:16px; transition:border-color .12s, background .12s}
+.opt:hover:not(:disabled){border-color:var(--navy); background:var(--surface-2)}
+.opt .k{flex:none; width:30px; height:30px; border-radius:8px; display:grid; place-items:center; font-family:var(--f-mono); font-weight:600; font-size:14px; color:#fff}
+.opt .t{min-width:0; overflow-wrap:anywhere}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--ok); background:var(--ok-bg)}
+.opt.wrong{border-color:var(--bad); background:var(--bad-bg)}
+.opt.dim{opacity:.55}
+.sol{border-radius:14px; padding:14px 16px; display:flex; flex-direction:column; gap:8px; border:1.5px solid var(--line); background:var(--surface-2)}
+.sol.ok{border-color:var(--ok)} .sol.bad{border-color:var(--bad)}
+.verdict{font-weight:900; font-size:17px}
+.sol.ok .verdict{color:var(--ok)} .sol.bad .verdict{color:var(--bad)}
+.exp{margin:0; font-size:15.5px; direction:rtl; text-align:right}
+.ans{font-size:14.5px; margin:0} .ans bdi{font-family:var(--f-en); font-weight:600}
+.vid{align-self:flex-start; display:inline-flex; align-items:center; gap:8px; text-decoration:none; font-weight:800; font-size:14.5px; color:#fff; background:var(--r4); padding:8px 14px; border-radius:10px}
+.vid svg{width:16px; height:16px}
+.nav{display:flex; gap:10px; justify-content:space-between; flex-wrap:wrap}
+.nav .btn{flex:1 1 160px}
+
+/* ---------- result ---------- */
+.score{display:flex; align-items:center; gap:20px; flex-wrap:wrap; justify-content:center; text-align:center}
+.dial{width:150px; height:150px; position:relative}
+.dial svg{width:100%; height:100%; transform:rotate(-90deg)}
+.dial .v{position:absolute; inset:0; display:grid; place-items:center; align-content:center; font-family:var(--f-mono); direction:ltr}
+.dial .v b{font-size:34px; font-weight:600; line-height:1}
+.dial .v span{font-size:13px; color:var(--muted)}
+.msg{display:flex; flex-direction:column; gap:4px; min-width:0}
+.msg h2{margin:0; font-size:26px; font-weight:900}
+.msg p{margin:0; color:var(--muted)}
+h3{margin:0; font-size:18px; font-weight:800}
+.topics{display:flex; flex-direction:column; gap:10px}
+.trow{display:grid; grid-template-columns:minmax(0,1fr) 56px; gap:4px 12px; align-items:center}
+.trow .nm{font-size:14.5px; font-weight:600}
+.trow .fr{font-family:var(--f-mono); font-size:13px; color:var(--muted); text-align:left; direction:ltr; font-variant-numeric:tabular-nums}
+.bar{grid-column:1/-1; height:8px; border-radius:5px; background:var(--line); overflow:hidden; display:flex}
+.bar i{height:100%; border-radius:5px}
+.review{display:flex; flex-direction:column; gap:12px}
+.rv{border:1px solid var(--line); border-radius:14px; padding:14px 16px; display:flex; flex-direction:column; gap:8px; background:var(--surface)}
+.rv .qtext{font-size:16px}
+.rv .row{display:flex; flex-direction:column; gap:2px; font-size:14.5px}
+.rv .row bdi{font-family:var(--f-en)}
+.rv .yours{color:var(--bad)} .rv .corr{color:var(--ok)}
+.empty{color:var(--muted); margin:0}
+
+footer{display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center; color:var(--muted); font-size:14px; padding-top:6px}
+footer .tg{color:var(--navy); font-weight:700; text-decoration:none}
+footer .ph{font-family:var(--f-mono); direction:ltr; user-select:all; color:var(--ink)}
+
+@media (max-width:480px){
+  .card{padding:18px; border-radius:16px}
+  .qtext{font-size:17px}
+  .fact .l{font-size:11.5px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap" dir="rtl" lang="ar">
+  <div class="ring" aria-hidden="true"></div>
+
+  <!-- START -->
+  <section class="card" id="startView">
+    <div class="hero">
+      <img class="logo" src="data:image/webp;base64,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" alt="شعار أكاديمية الشهاوي">
+      <div class="eyebrow">Physics 1 · Chapter 6 · Test-Bank</div>
+      <h1>كويز <span class="acc">شابتر 6</span></h1>
+      <p class="sub">Work and Kinetic Energy</p>
+      <div class="law" aria-label="قوانين الشابتر"><span><b>W = Fd cosθ</b></span><span><b>K = ½mv²</b></span><span><b>W<sub>net</sub> = ΔK</b></span></div>
+      <p class="hint">كل مرة تدخل يطلع لك 15 سؤال مختلفين من بنك الشابتر، وبتشوف الحل بعد كل سؤال. وإذا غلطت، يطلع لك رابط فيديو الشرح.</p>
+    </div>
+    <form id="startForm" class="card" style="box-shadow:none; padding:0; border:0" novalidate>
+      <div class="field">
+        <label for="nameIn">اكتب اسمك</label>
+        <input id="nameIn" autocomplete="name" placeholder="مثال: عبدالله محمد" maxlength="40">
+      </div>
+      <div class="facts" aria-label="تفاصيل الكويز">
+        <div class="fact"><span class="n">15</span><span class="l">سؤال</span></div>
+        <div class="fact"><span class="n">15</span><span class="l">درجة</span></div>
+        <div class="fact"><span class="n">61</span><span class="l">سؤال في البنك</span></div>
+      </div>
+      <p class="err" id="startErr" role="alert"></p>
+      <button class="btn" id="startBtn" type="submit">ابدأ الكويز</button>
+    </form>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="card" id="quizView" hidden>
+    <div class="top">
+      <div class="who"><img id="miniLogo" alt=""><div><div class="nm" id="qName"></div><div class="ch">Chapter 6 · Work and Kinetic Energy</div></div></div>
+      <div class="stats"><span class="pill ok" id="okPill">✓ 0</span><span class="pill bad" id="badPill">✗ 0</span></div>
+    </div>
+    <div class="track" id="track" aria-hidden="true"></div>
+    <div class="qhead"><span class="qno" id="qNo"></span><span class="tag" id="qTag"></span></div>
+    <p class="qtext" id="qText"></p>
+    <div class="opts" id="opts" role="group" aria-label="الاختيارات"></div>
+    <div class="sol" id="sol" hidden aria-live="polite"></div>
+    <div class="nav">
+      <button class="btn ghost" id="quitBtn" type="button">إنهاء وعرض النتيجة</button>
+      <button class="btn navy" id="nextBtn" type="button" disabled>السؤال التالي</button>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="card" id="resultView" hidden>
+    <div class="score">
+      <div class="dial">
+        <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--line)" stroke-width="12"/><circle id="arc" cx="60" cy="60" r="52" fill="none" stroke="var(--ok)" stroke-width="12" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7"/></svg>
+        <div class="v"><b id="pct">0%</b><span id="frac">0 / 0</span></div>
+      </div>
+      <div class="msg"><h2 id="resTitle"></h2><p id="resSub"></p></div>
+    </div>
+    <h3>مستواك في كل جزء</h3>
+    <div class="topics" id="topics"></div>
+    <h3 id="revTitle">الأسئلة اللي غلطت فيها</h3>
+    <div class="review" id="review"></div>
+    <div class="nav">
+      <button class="btn ghost" id="homeBtn" type="button">كويز جديد</button>
+      <button class="btn" id="retryWrongBtn" type="button">أعد الأسئلة اللي غلطت فيها</button>
+    </div>
+  </section>
+
+  <footer>
+    <div>حلول واجبات · ملخصات · تست بنك</div>
+    <a class="tg" href="https://t.me/+StND8hYfieEzZmE0" target="_blank" rel="noopener">جروب Physics 1 | Zero to Hero على تيليجرام</a>
+    <div>للتواصل: <span class="ph">059 926 7572</span></div>
+  </footer>
+</div>
+
+<script>
+document.getElementById('miniLogo').src = document.querySelector('.logo').src;
+const CHANNEL = 'https://t.me/+StND8hYfieEzZmE0';
+// روابط فيديوهات الشرح لكل موضوع. أي موضوع فاضي يروح للجروب.
+const TOPICS = {
+  work:    { name:'الشغل',                                video:'' },
+  kinetic: { name:'الطاقة الحركية ونظرية الشغل والطاقة', video:'' },
+  spring:  { name:'شغل الزنبرك',                          video:'' },
+  power:   { name:'القدرة',                               video:'' }
+};
+
+const BANK = [
+ // ---------- نظري ----------
+ {k:'T',t:'work', q:'The unit of work is:', o:['Newton','Joule','Watt','Joule/second'], a:1,
+  e:'W = F·d ← N·m = Joule (J). أما Watt = J/s فهي وحدة القدرة.'},
+ {k:'T',t:'power', q:'What is the SI unit of power?', o:['Joule (J)','Watt (W)','Newton (N)','Pascal (Pa)'], a:1,
+  e:'القدرة = الشغل ÷ الزمن ← J/s = Watt (W)'},
+ {k:'T',t:'work', q:'If the direction of the force is perpendicular to the direction of motion of the body, the work done is zero.', o:['True','False'], a:0, fix:true,
+  e:'صح. W = Fd cosθ و cos90° = 0 ← الشغل صفر.'},
+ {k:'T',t:'work', q:'A force F = 100 N pushes a box from point A to point B, a distance of 5.6 m along a 30° incline. The work done by the normal force on the box is:', o:['zero','20 J','30 J','560 J'], a:0,
+  e:'القوة العمودية دايم عمودية على اتجاه الحركة على السطح ← cos90° = 0 ← شغلها صفر.'},
+ {k:'T',t:'work', q:'A 40 N crate slides at constant speed 4 m down a rough slope that makes 30° with the horizontal. The work done by the normal force is:', o:['80 J','60 J','160 J','0 J'], a:3,
+  e:'العمودي عمودي على السطح والحركة على طول السطح ← بينهم 90° ← الشغل صفر.'},
+ {k:'T',t:'work', q:'An elevator is lifted up at constant speed by a steel cable attached to an electric motor. Which statement is correct?', o:['The cable does positive work, and the elevator does positive work.','The cable does positive work, and the elevator does negative work.','The cable does negative work, and the elevator does positive work.','The cable does negative work, and the elevator does negative work.'], a:1, fix:true,
+  e:'الكيبل يشد المصعد لفوق وهو طالع ← شغل موجب. والمصعد يشد الكيبل لتحت والكيبل طالع ← شغل سالب.'},
+ {k:'T',t:'kinetic', q:'If an object has zero kinetic energy, what must be true?', o:['The object is at rest.','The object has no mass.','The object is moving at constant speed.','The object has no potential energy.'], a:0,
+  e:'K = ½mv² = 0 وكتلته مو صفر ← v = 0 يعني الجسم ساكن.'},
+ {k:'T',t:'kinetic', q:'If the velocity of a moving object is doubled, how does its kinetic energy change?', o:['It stays the same.','It becomes four times greater.','It doubles.','It becomes half as large.'], a:1,
+  e:'K = ½mv²، لو v تضاعفت ← v² تصير 4 أضعاف ← K تصير 4 أضعاف.'},
+ {k:'T',t:'kinetic', q:'An object that has kinetic energy must be:', o:['moving','at rest'], a:0, fix:true,
+  e:'K = ½mv² ← عشان تكون K أكبر من صفر لازم v ما تكون صفر، يعني الجسم يتحرك.'},
+ {k:'T',t:'kinetic', q:'Two iceboats (masses m and 2m) race on a frictionless frozen lake. Both start at rest, and the wind exerts the same constant force on both. Which crosses the finish line with more kinetic energy?', o:['The iceboat of mass m: it has twice as much KE as the other.','The iceboat of mass m: it has four times as much KE as the other.','The iceboat of mass 2m: it has twice as much KE as the other.','They both cross the finish line with the same kinetic energy.'], a:3, fix:true,
+  e:'نفس القوة على نفس المسافة ← نفس الشغل W = Fd، ونظرية الشغل والطاقة تقول W = ΔK ← نفس الطاقة الحركية.'},
+ {k:'T',t:'work', q:'A person carries a 15 kg suitcase horizontally at constant speed. The applied force is horizontal, and the displacement is also horizontal. What is the work done by gravity?', o:['Positive','Negative','Zero','Equal to the work done by the person'], a:2,
+  e:'الجاذبية رأسية والإزاحة أفقية ← بينهم 90° ← شغل الجاذبية صفر.'},
+ {k:'T',t:'work', q:'If an object is rising up, what is the sign of the work done by gravity?', o:['Positive','Zero','Negative','It depends on the speed'], a:2,
+  e:'الجاذبية لتحت والحركة لفوق (θ = 180°) ← cos180° = −1 ← الشغل سالب.'},
+ {k:'T',t:'work', q:'Three blocks are connected by ropes over pulleys. When released, block C moves downward, block B moves up a ramp, and block A moves to the right on a horizontal surface. After each block has moved a distance d, the force of gravity has done:', o:['positive work on A, B, and C','positive work on A and B, and negative work on C','zero work on A, positive work on B, and negative work on C','zero work on A, negative work on B, and positive work on C'], a:3, fix:true,
+  e:'A أفقي ← الجاذبية عمودية على حركته ← صفر. B يطلع لفوق ← سالب. C ينزل لتحت مع الجاذبية ← موجب.'},
+
+ // ---------- مسائل ----------
+ {k:'P',t:'work', q:'The work done when a 5 N force moves an object 3 m in its direction is:', o:['8 J','10 J','15 J','5 J'], a:2,
+  e:'W = F·d = 5 × 3 = 15 J'},
+ {k:'P',t:'work', q:'A constant force of 10 N pushes a box 5 m across a smooth floor in the same direction as the motion. What is the work done by the force?', o:['2 J','50 J','10 J','0 J'], a:1,
+  e:'W = F·d = 10 × 5 = 50 J'},
+ {k:'P',t:'work', q:'A particle moves 5 m in the positive y-direction while a constant force F = î + 4ĵ acts on it. What is the work done by the force?', o:['25 J','5 J','20 J','0 J'], a:2,
+  e:'d = 5ĵ ← W = F·d = (1)(0) + (4)(5) = 20 J'},
+ {k:'P',t:'work', q:'A particle moves 10 m in the positive x-direction while acted on by a constant force F = (4î + 4k̂) N. The work done by this force is:', o:['20 J','10 J','40 J','−20 J'], a:2,
+  e:'d = 10î ← W = (4)(10) + (0) + (4)(0) = 40 J (مركبة k ما تشتغل لأنها عمودية على الحركة)'},
+ {k:'P',t:'work', q:'A force F = 100 N, parallel to a 30° incline, pushes a box from point A to point B, a distance of 5.6 m up the incline. The work done by the applied force is:', o:['zero','20 J','30 J','560 J'], a:3,
+  e:'القوة بنفس اتجاه الحركة (θ = 0) ← W = Fd = 100 × 5.6 = 560 J'},
+ {k:'P',t:'work', q:'Two forces act on a 2.0 kg object on a frictionless 30° incline: F₁ = 20.0 N parallel to the incline (pointing up the slope) and F₂ = 40.0 N horizontal. The object moves 0.60 m up the incline. The work done by F₁ is:', o:['20.8 J','24.0 J','5.0 J','12.0 J'], a:3,
+  e:'F₁ بنفس اتجاه الحركة ← W₁ = F₁d = 20 × 0.6 = 12.0 J'},
+ {k:'P',t:'work', q:'A particle moves through a displacement d = (12 m)i − (12 m)j while acted on by a force F = (24 N)i + (15 N)j. The work done by this force is:', o:['270 J','198 J','145 J','108 J'], a:3,
+  e:'W = F·d = (24)(12) + (15)(−12) = 288 − 180 = 108 J'},
+ {k:'P',t:'work', q:'A force F = 12 N i − 10 N j acts on an object. How much work does it do as the object moves from the origin to r = 14 m i + 11 m j?', o:['46 J','78 J','58 J','278 J'], a:2,
+  e:'W = F·r = (12)(14) + (−10)(11) = 168 − 110 = 58 J'},
+ {k:'P',t:'work', q:'A student slides her 80.0 kg desk 3.40 m across a level floor at constant speed. If the coefficient of kinetic friction is 0.400, how much work did she do?', o:['16.0 J','6.40 J','10.7 J','1.07 kJ'], a:3,
+  e:'سرعة ثابتة ← قوتها = الاحتكاك = μmg = 0.4 × 80 × 9.8 = 313.6 N ← W = 313.6 × 3.4 ≈ 1066 J ≈ 1.07 kJ'},
+ {k:'P',t:'kinetic', q:'A 4 kg block slides from rest down a frictionless 30° incline. The work done by the net force after 3 s is:', o:['215.3 J','942 J','432.2 J','123.2 J'], a:2,
+  e:'a = g sin30° = 4.9 m/s² ← v = 4.9 × 3 = 14.7 m/s ← W = ΔK = ½ × 4 × 14.7² ≈ 432.2 J'},
+ {k:'P',t:'kinetic', q:'The kinetic energy of a 2 kg object moving at 3 m/s is:', o:['3 J','6 J','10 J','9 J'], a:3,
+  e:'K = ½mv² = ½ × 2 × 9 = 9 J'},
+ {k:'P',t:'kinetic', q:'A moving particle of mass 2 kg has a kinetic energy of 10 J. Its speed is:', o:['980 m/s','9.8 m/s','10 m/s','3.16 m/s'], a:3,
+  e:'v = √(2K/m) = √(2 × 10/2) = √10 ≈ 3.16 m/s'},
+ {k:'P',t:'kinetic', q:'A 4 kg cart starts up an incline with a speed of 3 m/s and comes to rest 2 m up the incline. The total work done on the cart is:', o:['−6 J','−8 J','−12 J','−18 J'], a:3,
+  e:'W = ΔK = 0 − ½ × 4 × 9 = −18 J'},
+ {k:'P',t:'kinetic', q:'A 12 kg cart starts up an incline with a speed of 3 m/s and comes to rest 2 m up the incline. The total work done on the cart is:', o:['−18 J','−54 J','−36 J','18 J'], a:1,
+  e:'W = ΔK = 0 − ½ × 12 × 9 = −54 J'},
+ {k:'P',t:'kinetic', q:'A 5 kg cart is moving horizontally at 4 m/s. The work needed to increase its speed to 10 m/s is:', o:['90 J','210 J','250 J','120 J'], a:1,
+  e:'W = ΔK = ½ × 5 × (100 − 16) = 210 J'},
+ {k:'P',t:'kinetic', q:'Which of the following objects has the greatest kinetic energy?', o:['A 2.00 kg object moving at 1.00 m/s','A 1.00 kg object moving at 2.00 m/s','A 4.00 kg object initially at rest, then had 8.00 J of total work done on it','A 4.00 kg object initially moving at 2.00 m/s, then had −8.00 J of total work done on it'], a:2, fix:true,
+  e:'A: ½×2×1 = 1 J. B: ½×1×4 = 2 J. C: 0 + 8 = 8 J. D: ½×4×4 − 8 = 0 J ← الأكبر C.'},
+ {k:'P',t:'kinetic', q:'A 5 kg block is released from rest 8 m above the ground. Its kinetic energy when it has fallen 4 m is:', o:['156 J','392 J','110 J','196 J'], a:3,
+  e:'شغل الجاذبية = ΔK ← K = mgh = 5 × 9.8 × 4 = 196 J'},
+ {k:'P',t:'kinetic', q:'A force acts on a 6 kg particle so that its position is x = 2t − 4t² + t³ (x in m, t in s). The work done by the force from t = 0 to t = 3 s is:', o:['63 J','81 J','99 J','110 J'], a:0,
+  e:'v = 2 − 8t + 3t² ← v(0) = 2، v(3) = 5 ← W = ½ × 6 × (25 − 4) = 63 J'},
+ {k:'P',t:'kinetic', q:'A 5.00 kg box slides 4.00 m across the floor before coming to rest. If its initial speed was 3.00 m/s, the coefficient of kinetic friction is:', o:['0.206','0.138','0.115','0.183'], a:2,
+  e:'شغل الاحتكاك = ΔK ← μmgd = ½mv² ← μ = v²/(2gd) = 9/(2 × 9.8 × 4) ≈ 0.115'},
+ {k:'P',t:'kinetic', q:'A 1000.0 kg car is moving at 15 km/h. If a 2000.0 kg truck has 11 times the kinetic energy of the car, how fast is the truck moving?', o:['49 km/h','42 km/h','28 km/h','35 km/h'], a:3,
+  e:'½(2000)v² = 11 × ½(1000)(15²) ← v² = 11 × 225/2 = 1237.5 ← v ≈ 35 km/h'},
+ {k:'P',t:'work', q:'A man of mass 102 kg climbs a stair 5 m high at constant speed. The work done by the man is:', o:['999.6 J','510 J','4998 J','2499 J'], a:2,
+  e:'سرعة ثابتة ← قوته = وزنه ← W = mgh = 102 × 9.8 × 5 = 4998 J'},
+ {k:'P',t:'work', q:'A 5 kg block is lifted vertically upward 2 m at constant speed. The work done by the applied force is:', o:['80 J','−98 J','98 J','70 J'], a:2,
+  e:'سرعة ثابتة ← F = mg ← W = mgh = 5 × 9.8 × 2 = 98 J'},
+ {k:'P',t:'work', q:'A 5 kg block is lifted vertically upward 2 m at constant speed. The work done by gravity is:', o:['80 J','−98 J','98 J','70 J'], a:1,
+  e:'الجاذبية لتحت والحركة لفوق ← W = −mgh = −98 J'},
+ {k:'P',t:'spring', q:'If the restoring force of a spring at a distance of 0.5 m is 15 N, the work done by the spring when it is stretched 0.5 m is:', o:['−3.75 J','−6 J','−9 J','−12 J'], a:0,
+  e:'k = F/x = 15/0.5 = 30 N/m ← شغل الزنبرك = −½kx² = −½ × 30 × 0.25 = −3.75 J'},
+ {k:'P',t:'spring', q:'A spring with spring constant 200 N/m is stretched by 6 cm. How much work is done on the spring?', o:['0.36 J','0.18 J','0.72 J','0.06 J'], a:0,
+  e:'W = ½kx² = ½ × 200 × (0.06)² = 0.36 J'},
+ {k:'P',t:'spring', q:'What is the change in length of a spring if a force of 50 N acts on it and the spring constant is 100 N/m?', o:['0.4 m','0.9 m','0.5 m','0.7 m'], a:2,
+  e:'F = kx ← x = 50/100 = 0.5 m'},
+ {k:'P',t:'spring', q:'A 15 N force compresses a spring from a length of 30 cm to 27 cm. The spring constant is:', o:['500 N/m','1 N/m','50 N/m','No one is correct'], a:0, fix:true,
+  e:'x = 30 − 27 = 3 cm = 0.03 m ← k = F/x = 15/0.03 = 500 N/m'},
+ {k:'P',t:'spring', q:'If the restoring force of a spring at a distance of 0.5 m is 20 N, the work done by the spring when stretched 0.5 m is:', o:['−2.5 J','−5 J','−9 J','−1 J'], a:1,
+  e:'k = 20/0.5 = 40 N/m ← W = −½ × 40 × 0.25 = −5 J'},
+ {k:'P',t:'spring', q:'If 10 J of work is done to stretch a spring 50 cm from its natural length, the spring constant is:', o:['40 N/m','0.4 N/m','0.008 N/m','80 N/m'], a:3,
+  e:'W = ½kx² ← 10 = ½k(0.5)² ← k = 80 N/m'},
+ {k:'P',t:'spring', q:'A 5 N force compresses a spring from a length of 30 cm to 25 cm. The spring constant is:', o:['50 N/m','200 N/m','100 N/m','250 N/m'], a:2,
+  e:'x = 0.05 m ← k = 5/0.05 = 100 N/m'},
+ {k:'P',t:'spring', q:'A force compresses a spring (k = 45 N/m) from a length of 30 cm to 26 cm. The work done by the spring is:', o:['−0.0360 J','−0.0438 J','−0.050 J','−0.0563 J'], a:0,
+  e:'x = 0.04 m ← شغل الزنبرك = −½kx² = −½ × 45 × 0.0016 = −0.036 J'},
+ {k:'P',t:'spring', q:'What is the change in length of a spring if a force of 30 N acts on it and the spring constant is 100 N/m?', o:['0.4 m','0.9 m','0.3 m','0.5 m'], a:2,
+  e:'x = F/k = 30/100 = 0.3 m'},
+ {k:'P',t:'spring', q:'A spring has a force constant of 15.0 N/m. The work required to stretch it 0.6 m from its relaxed position is:', o:['9 J','6 J','5.4 J','2.7 J'], a:3,
+  e:'W = ½kx² = ½ × 15 × 0.36 = 2.7 J'},
+ {k:'P',t:'spring', q:'A force of 15 N stretches a spring 12 cm. The spring constant is:', o:['315 N/m','3.5 N/m','450 N/m','125 N/m'], a:3,
+  e:'k = F/x = 15/0.12 = 125 N/m'},
+ {k:'P',t:'spring', q:'A spring requires 6 J of work to stretch 10 cm. The spring constant k is:', o:['1500 N/m','1200 N/m','200 N/m','800 N/m'], a:1,
+  e:'6 = ½k(0.1)² ← k = 12/0.01 = 1200 N/m'},
+ {k:'P',t:'spring', q:'A 1.6 kg block on a frictionless surface is attached to a horizontal spring (k = 1.0×10³ N/m). The spring is compressed 2.0 cm and released from rest. The work done by the spring as it returns to its natural length is:', o:['0.2 J','2 J','3.5 J','6 J'], a:0,
+  e:'W = ½kx² = ½ × 1000 × (0.02)² = 0.2 J (موجب لأن الزنبرك يدفع الجسم بنفس اتجاه حركته)'},
+ {k:'P',t:'spring', q:'A block slides into a spring (k = 200 N/m) and compresses it by 0.3 m. The magnitude of the work done by the spring to stop the block is:', o:['9 J','60 J','50 J','100 J'], a:0,
+  e:'|W| = ½kx² = ½ × 200 × 0.09 = 9 J (وإشارته سالبة لأن الزنبرك عكس الحركة)'},
+ {k:'P',t:'spring', q:'The work done in stretching a spring (k = 400 N/m) from x₁ = 5 cm to x₂ = 10 cm is:', o:['1.5 J','3.5 J','0.45 J','2 J'], a:0,
+  e:'W = ½k(x₂² − x₁²) = ½ × 400 × (0.01 − 0.0025) = 1.5 J'},
+ {k:'P',t:'spring', q:'An object on an ideal spring is pulled across a frictionless surface. If k = 45 N/m and the spring is stretched 0.88 m while the object accelerates at 1.1 m/s², the mass of the object is:', o:['39 kg','36 kg','31 kg','46 kg'], a:1,
+  e:'القوة الوحيدة الأفقية قوة الزنبرك: kx = ma ← m = 45 × 0.88/1.1 = 36 kg'},
+ {k:'P',t:'power', q:'If 35 J of work is done on a particle in 5 s, what is the power output?', o:['5.5 W','7 W','17.5 W','30 W'], a:1,
+  e:'P = W/t = 35/5 = 7 W'},
+ {k:'P',t:'power', q:'A motor does 300 J of work in 10 s. What is its average power?', o:['30 W','20 W','300 W','3 W'], a:0,
+  e:'P = W/t = 300/10 = 30 W'},
+ {k:'P',t:'power', q:'A machine does 35 J of work in 10 s. How much power does the machine use?', o:['35 W','10 W','3.5 W','3 W'], a:2,
+  e:'P = W/t = 35/10 = 3.5 W'},
+ {k:'P',t:'power', q:'A 10 kg box moves at a constant speed of 5 m/s along the +x axis due to a 130 N force in the direction of motion. The power due to this force is:', o:['650 W','720 W','490 W','26 W'], a:0,
+  e:'P = F·v = 130 × 5 = 650 W'},
+ {k:'P',t:'power', q:'If the work done on a particle is 32 J in 4 s, the power is:', o:['36 W','8 W','1 W','6 W'], a:1,
+  e:'P = W/t = 32/4 = 8 W'},
+ {k:'P',t:'power', q:'A person lifts a weight of 100 N 2 m above the ground in 2 s. The power is:', o:['60 W','40 W','100 W','80 W'], a:2,
+  e:'W = 100 × 2 = 200 J ← P = 200/2 = 100 W'},
+ {k:'P',t:'power', q:'A 120 N force acts on a box moving at a constant speed of 6 m/s along the +x axis (in the direction of motion). The power due to this force is:', o:['520 W','810 W','630 W','720 W'], a:3,
+  e:'P = F·v = 120 × 6 = 720 W'},
+ {k:'P',t:'power', q:'A box is lifted at a constant speed of 2 m/s and the power applied to it is 3000 W. The force exerted on the box is:', o:['4000 N','2000 N','1500 N','6000 N'], a:2,
+  e:'P = Fv ← F = 3000/2 = 1500 N'},
+ {k:'P',t:'power', q:'A 2000 kg car accelerates uniformly from rest to 5 m/s in 4 s. The average power delivered by the engine is:', o:['6250 W','3100 W','1500 W','2500 W'], a:0,
+  e:'W = ΔK = ½ × 2000 × 25 = 25000 J ← P = 25000/4 = 6250 W'}
+];
+
+
+/* ---------- state ---------- */
+const $ = id => document.getElementById(id);
+const COLORS = ['var(--r1)','var(--r2)','var(--r4)','var(--r5)','var(--r6)'];
+const LET = ['A','B','C','D','E'];
+let S = null;          // current run
+let lastWrongIds = [];
+
+const shuffle = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const videoOf = t => TOPICS[t].video || CHANNEL;
+const playIcon = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+
+/* ---------- start ---------- */
+const QUIZ_SIZE = Math.min(15, BANK.length);
+const SEEN_KEY = 'shahawy_ch6_seen';
+try { const n = localStorage.getItem('shahawy_name'); if (n) $('nameIn').value = n; } catch (_) {}
+
+// Pick 15 questions, preferring ones this student hasn't seen in earlier attempts.
+function pickQuestions() {
+  let seen = [];
+  try { seen = JSON.parse(localStorage.getItem(SEEN_KEY) || '[]'); } catch (_) {}
+  const seenSet = new Set(seen);
+  let fresh = shuffle(BANK.map((_, i) => i).filter(i => !seenSet.has(i)));
+  let ids;
+  if (fresh.length >= QUIZ_SIZE) {
+    ids = fresh.slice(0, QUIZ_SIZE);
+  } else {
+    // The bank is almost used up: take what's left, fill from the rest, and start a new cycle.
+    const rest = shuffle(BANK.map((_, i) => i).filter(i => seenSet.has(i)));
+    ids = fresh.concat(rest.slice(0, QUIZ_SIZE - fresh.length));
+    seen = [];
+  }
+  try { localStorage.setItem(SEEN_KEY, JSON.stringify(seen.concat(ids))); } catch (_) {}
+  return shuffle(ids);
+}
+
+$('startForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = $('nameIn').value.trim();
+  if (!name) { $('startErr').textContent = 'اكتب اسمك عشان تبدأ.'; $('nameIn').focus(); return; }
+  try { localStorage.setItem('shahawy_name', name); } catch (_) {}
+  begin(name, pickQuestions());
+});
+
+function begin(name, ids) {
+  S = { name, items: ids.map(id => {
+          const q = BANK[id];
+          const order = (q.fix || q.o.length < 3) ? q.o.map((_, i) => i) : shuffle(q.o.map((_, i) => i));
+          return { id, order, pick: null };
+        }), i: 0 };
+  $('qName').textContent = name;
+  $('track').innerHTML = S.items.map(() => '<i></i>').join('');
+  show('quizView'); render();
+}
+
+function show(v) { ['startView','quizView','resultView'].forEach(x => $(x).hidden = x !== v); window.scrollTo({top:0, behavior:'smooth'}); }
+
+/* ---------- quiz ---------- */
+function render() {
+  const it = S.items[S.i], q = BANK[it.id];
+  $('qNo').textContent = `Question ${S.i + 1} / ${S.items.length}`;
+  $('qTag').textContent = (q.k === 'T' ? 'نظري · ' : 'مسألة · ') + TOPICS[q.t].name;
+  $('qText').textContent = q.q;
+  $('opts').innerHTML = it.order.map((oi, pos) =>
+    `<button type="button" class="opt" data-oi="${oi}"><span class="k" style="background:${COLORS[pos]}">${LET[pos]}</span><span class="t">${esc(q.o[oi])}</span></button>`).join('');
+  $('sol').hidden = true; $('sol').className = 'sol';
+  $('nextBtn').disabled = true;
+  $('nextBtn').textContent = S.i === S.items.length - 1 ? 'عرض النتيجة' : 'السؤال التالي';
+  paintTrack(); paintStats();
+}
+
+$('opts').addEventListener('click', e => {
+  const b = e.target.closest('.opt'); if (!b || b.disabled) return;
+  const it = S.items[S.i], q = BANK[it.id];
+  it.pick = +b.dataset.oi;
+  const ok = it.pick === q.a;
+  [...$('opts').children].forEach(o => {
+    o.disabled = true;
+    const oi = +o.dataset.oi;
+    if (oi === q.a) o.classList.add('right');
+    else if (oi === it.pick) o.classList.add('wrong');
+    else o.classList.add('dim');
+  });
+  const sol = $('sol');
+  sol.className = 'sol ' + (ok ? 'ok' : 'bad');
+  sol.innerHTML = `<div class="verdict">${ok ? 'إجابة صحيحة 👏' : 'إجابة خاطئة'}</div>` +
+    (ok ? '' : `<p class="ans">الإجابة الصحيحة: <bdi>${esc(q.o[q.a])}</bdi></p>`) +
+    `<p class="exp">${esc(q.e)}</p>` +
+    (ok ? '' : `<a class="vid" href="${videoOf(q.t)}" target="_blank" rel="noopener">${playIcon}شاهد فيديو الشرح: ${TOPICS[q.t].name}</a>`);
+  sol.hidden = false;
+  $('nextBtn').disabled = false; $('nextBtn').focus({preventScroll:true});
+  paintTrack(); paintStats();
+});
+
+$('nextBtn').addEventListener('click', () => {
+  if (S.i < S.items.length - 1) { S.i++; render(); window.scrollTo({top:0, behavior:'smooth'}); }
+  else finish();
+});
+$('quitBtn').addEventListener('click', finish);
+
+function paintTrack() {
+  [...$('track').children].forEach((el, k) => {
+    const it = S.items[k];
+    el.className = it.pick === null ? (k === S.i ? 'cur' : '') : (it.pick === BANK[it.id].a ? 'ok' : 'bad');
+  });
+}
+function paintStats() {
+  const done = S.items.filter(x => x.pick !== null);
+  const ok = done.filter(x => x.pick === BANK[x.id].a).length;
+  $('okPill').textContent = '✓ ' + ok; $('badPill').textContent = '✗ ' + (done.length - ok);
+}
+
+/* ---------- result ---------- */
+function finish() {
+  const answered = S.items.filter(x => x.pick !== null);
+  const total = S.items.length;
+  const ok = answered.filter(x => x.pick === BANK[x.id].a).length;
+  const pct = total ? Math.round(ok / total * 100) : 0;
+  $('pct').textContent = pct + '%';
+  $('frac').textContent = `${ok} / ${total}`;
+  const arc = $('arc'); const C = 326.7;
+  arc.style.stroke = pct >= 85 ? 'var(--ok)' : pct >= 60 ? 'var(--r3)' : 'var(--bad)';
+  arc.style.transition = 'stroke-dashoffset .9s ease';
+  arc.setAttribute('stroke-dashoffset', C);
+  requestAnimationFrame(() => requestAnimationFrame(() => arc.setAttribute('stroke-dashoffset', C * (1 - pct / 100))));
+  $('resTitle').textContent = pct >= 90 ? `ممتاز يا ${S.name}! 🔥` : pct >= 75 ? `شغل حلو يا ${S.name} 👏` : pct >= 50 ? `قريب يا ${S.name}، راجع غلطاتك` : `لا تشيل هم يا ${S.name}، نراجع ونرجع`;
+  const skipped = total - answered.length;
+  $('resSub').textContent = `جاوبت ${answered.length} من ${total} سؤال` + (skipped ? ` (${skipped} بدون إجابة)` : '') + ' · كل سؤال عليه درجة.';
+
+  // per topic
+  const agg = {};
+  S.items.forEach(x => { const t = BANK[x.id].t; agg[t] ??= {ok:0, n:0}; agg[t].n++; if (x.pick === BANK[x.id].a) agg[t].ok++; });
+  $('topics').innerHTML = Object.entries(agg).sort((a, b) => a[1].ok / a[1].n - b[1].ok / b[1].n).map(([t, v]) => {
+    const p = v.ok / v.n * 100;
+    const col = p >= 85 ? 'var(--ok)' : p >= 60 ? 'var(--r3)' : 'var(--bad)';
+    return `<div class="trow"><span class="nm">${TOPICS[t].name}</span><span class="fr">${v.ok}/${v.n}</span><div class="bar"><i style="width:${p}%; background:${col}"></i></div></div>`;
+  }).join('');
+
+  // wrong + skipped review
+  const wrong = S.items.filter(x => x.pick !== BANK[x.id].a);
+  lastWrongIds = wrong.map(x => x.id);
+  $('revTitle').textContent = wrong.length ? `الأسئلة اللي غلطت فيها (${wrong.length})` : 'الأسئلة اللي غلطت فيها';
+  $('review').innerHTML = wrong.length ? wrong.map(x => {
+    const q = BANK[x.id];
+    return `<div class="rv">
+      <span class="tag" style="align-self:flex-start">${TOPICS[q.t].name}</span>
+      <p class="qtext">${esc(q.q)}</p>
+      <div class="row yours">إجابتك: <bdi>${x.pick === null ? '— (ما جاوبت)' : esc(q.o[x.pick])}</bdi></div>
+      <div class="row corr">الإجابة الصحيحة: <bdi>${esc(q.o[q.a])}</bdi></div>
+      <p class="exp">${esc(q.e)}</p>
+      <a class="vid" href="${videoOf(q.t)}" target="_blank" rel="noopener">${playIcon}شاهد فيديو الشرح: ${TOPICS[q.t].name}</a>
+    </div>`;
+  }).join('') : '<p class="empty">ولا غلطة. كفو عليك 💯</p>';
+  $('retryWrongBtn').hidden = !wrong.length;
+  show('resultView');
+}
+
+$('homeBtn').addEventListener('click', () => begin(S.name, pickQuestions()));
+$('retryWrongBtn').addEventListener('click', () => begin(S.name, shuffle(lastWrongIds)));
+</script>
+
+</body>
+</html>
