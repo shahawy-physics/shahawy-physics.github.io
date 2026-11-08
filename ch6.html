@@ -164,7 +164,7 @@ footer .ph{font-family:var(--f-mono); direction:ltr; user-select:all; color:var(
       <h1>كويز <span class="acc">شابتر 6</span></h1>
       <p class="sub">Work and Kinetic Energy</p>
       <div class="law" aria-label="قوانين الشابتر"><span><b>W = Fd cosθ</b></span><span><b>K = ½mv²</b></span><span><b>W<sub>net</sub> = ΔK</b></span></div>
-      <p class="hint">كل مرة تدخل يطلع لك 15 سؤال مختلفين من بنك الشابتر، وبتشوف الحل بعد كل سؤال. وإذا غلطت، يطلع لك رابط فيديو الشرح.</p>
+      <p class="hint">كل مرة تدخل يطلع لك 15 سؤال مختلفين من بنك الشابتر، وبتشوف الحل بعد كل سؤال.</p>
     </div>
     <form id="startForm" class="card" style="box-shadow:none; padding:0; border:0" novalidate>
       <div class="field">
@@ -451,8 +451,7 @@ $('opts').addEventListener('click', e => {
   sol.className = 'sol ' + (ok ? 'ok' : 'bad');
   sol.innerHTML = `<div class="verdict">${ok ? 'إجابة صحيحة 👏' : 'إجابة خاطئة'}</div>` +
     (ok ? '' : `<p class="ans">الإجابة الصحيحة: <bdi>${esc(q.o[q.a])}</bdi></p>`) +
-    `<p class="exp">${esc(q.e)}</p>` +
-    (ok ? '' : `<a class="vid" href="${videoOf(q.t)}" target="_blank" rel="noopener">${playIcon}شاهد فيديو الشرح: ${TOPICS[q.t].name}</a>`);
+    `<p class="exp">${esc(q.e)}</p>`;
   sol.hidden = false;
   $('nextBtn').disabled = false; $('nextBtn').focus({preventScroll:true});
   paintTrack(); paintStats();
@@ -514,7 +513,6 @@ function finish() {
       <div class="row yours">إجابتك: <bdi>${x.pick === null ? '— (ما جاوبت)' : esc(q.o[x.pick])}</bdi></div>
       <div class="row corr">الإجابة الصحيحة: <bdi>${esc(q.o[q.a])}</bdi></div>
       <p class="exp">${esc(q.e)}</p>
-      <a class="vid" href="${videoOf(q.t)}" target="_blank" rel="noopener">${playIcon}شاهد فيديو الشرح: ${TOPICS[q.t].name}</a>
     </div>`;
   }).join('') : '<p class="empty">ولا غلطة. كفو عليك 💯</p>';
   $('retryWrongBtn').hidden = !wrong.length;
